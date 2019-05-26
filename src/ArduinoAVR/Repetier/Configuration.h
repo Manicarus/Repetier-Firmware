@@ -134,7 +134,7 @@ is a full cartesian system where x, y and z moves are handled by separate motors
 Cases 1, 2, 8 and 9 cover all needed xy and xz H gantry systems. If you get results mirrored etc. you can swap motor connections for x and y.
 If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
 */
-#define DRIVE_SYSTEM 0
+#define DRIVE_SYSTEM 1
 /*
   Normal core xy implementation needs 2 virtual steps for a motor step to guarantee
   that every tiny move gets maximum one step regardless of direction. This can cost
@@ -144,7 +144,7 @@ If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
   linear you can reduce delta computations per second to 10 and also use 10 
   subsegments instead of 20 to reduce memory usage.
 */
-//#define FAST_COREXYZ
+#define FAST_COREXYZ
 
 /* You can write some GCODE to be executed on startup. Use this e.g. to set some 
 pins. Separate multiple GCODEs with \n
@@ -197,13 +197,13 @@ pins. Separate multiple GCODEs with \n
 /** \brief Number of steps for a 1mm move in x direction.
 For xy gantry use 2*belt moved!
 Overridden if EEPROM activated. */
-#define XAXIS_STEPS_PER_MM 98.425196
+#define XAXIS_STEPS_PER_MM 57.14
 /** \brief Number of steps for a 1mm move in y direction.
 For xy gantry use 2*belt moved!
 Overridden if EEPROM activated.*/
-#define YAXIS_STEPS_PER_MM 98.425196
+#define YAXIS_STEPS_PER_MM 57.14
 /** \brief Number of steps for a 1mm move in z direction  Overridden if EEPROM activated.*/
-#define ZAXIS_STEPS_PER_MM 2560
+#define ZAXIS_STEPS_PER_MM 57.14
 #endif
 
 // ##########################################################################################
@@ -251,7 +251,7 @@ controlled by settings in extruder 0 definition. */
 #define EXT0_Y_OFFSET 0
 #define EXT0_Z_OFFSET 0
 // for skeinforge 40 and later, steps to pull the plastic 1 mm inside the extruder, not out.  Overridden if EEPROM activated.
-#define EXT0_STEPS_PER_MM 413 //385
+#define EXT0_STEPS_PER_MM 100 //385
 // What type of sensor is used?
 // 0 is no thermistor/temperature control
 // 1 is 100k thermistor (Epcos B57560G0107F000 - RepRap-Fab.org and many other)
@@ -710,7 +710,7 @@ Value is used for all generic tables created. */
 // ############# Heated bed configuration ########################
 
 /** \brief Set true if you have a heated bed connected to your board, false if not */
-#define HAVE_HEATED_BED 1
+#define HAVE_HEATED_BED false
 
 #define HEATED_BED_MAX_TEMP 115
 /** Skip M190 wait, if heated bed is already within x degrees. Fixed numbers only, 0 = off. */
@@ -845,17 +845,17 @@ PRINTER_MODE_CNC 2
 use a mechanical endstop connected with GND. Set value to false for no pull-up
 on this endstop.
 */
-#define ENDSTOP_PULLUP_X_MIN false
-#define ENDSTOP_PULLUP_Y_MIN false
+#define ENDSTOP_PULLUP_X_MIN true
+#define ENDSTOP_PULLUP_Y_MIN true
 #define ENDSTOP_PULLUP_Z_MIN false
-#define ENDSTOP_PULLUP_X_MAX true
-#define ENDSTOP_PULLUP_Y_MAX true
-#define ENDSTOP_PULLUP_Z_MAX false
+#define ENDSTOP_PULLUP_X_MAX false
+#define ENDSTOP_PULLUP_Y_MAX false
+#define ENDSTOP_PULLUP_Z_MAX true
 
 //set to true to invert the logic of the endstops
 #define ENDSTOP_X_MIN_INVERTING true
 #define ENDSTOP_Y_MIN_INVERTING true
-#define ENDSTOP_Z_MIN_INVERTING true
+#define ENDSTOP_Z_MIN_INVERTING false
 #define ENDSTOP_X_MAX_INVERTING false
 #define ENDSTOP_Y_MAX_INVERTING false
 #define ENDSTOP_Z_MAX_INVERTING true
@@ -920,11 +920,11 @@ on this endstop.
 
 // Inverting motor direction. Only in case of pure cartesian printers, this
 // is also the axis you invert!
-#define INVERT_X_DIR 1
+#define INVERT_X_DIR 0
 #define INVERT_X2_DIR 1
-#define INVERT_Y_DIR 1
+#define INVERT_Y_DIR 0
 #define INVERT_Y2_DIR 1
-#define INVERT_Z_DIR 1
+#define INVERT_Z_DIR 0
 #define INVERT_Z2_DIR 1
 #define INVERT_Z3_DIR 1
 #define INVERT_Z4_DIR 1
@@ -976,9 +976,9 @@ on this endstop.
 // For delta robot Z_MAX_LENGTH is the maximum travel of the towers and should be set to the distance between the hotend
 // and the platform when the printer is at its home position.
 // If EEPROM is enabled these values will be overridden with the values in the EEPROM
-#define X_MAX_LENGTH 165
-#define Y_MAX_LENGTH 175
-#define Z_MAX_LENGTH 116.820
+#define X_MAX_LENGTH 160
+#define Y_MAX_LENGTH 150
+#define Z_MAX_LENGTH 110
 // Coordinates for the minimum axis. Can also be negative if you want to have the bed start at 0 and the printer can go to the left side
 // of the bed. Maximum coordinate is given by adding the above X_MAX_LENGTH values.
 #define X_MIN_POS 0
@@ -1137,12 +1137,12 @@ Mega. Used only for nonlinear systems like delta or tuga. */
     */
 #define MAX_FEEDRATE_X 200
 #define MAX_FEEDRATE_Y 200
-#define MAX_FEEDRATE_Z 5
+#define MAX_FEEDRATE_Z 180
 
 /** Home position speed in mm/s. Overridden if EEPROM activated. */
 #define HOMING_FEEDRATE_X 80
 #define HOMING_FEEDRATE_Y 80
-#define HOMING_FEEDRATE_Z 3
+#define HOMING_FEEDRATE_Z 60
 
 /** Set order of axis homing. Use HOME_ORDER_XYZ and replace XYZ with your order. 
  * If you measure Z with your extruder tip you need a hot extruder to get right measurement. In this
@@ -1583,38 +1583,38 @@ to recalibrate z.
  That way the real bed is always the reference height. For inductive sensors
  or z min endstops the coating has no effect on the result, so you should use mode 0.
 */
-#define Z_PROBE_Z_OFFSET_MODE 0
+#define Z_PROBE_Z_OFFSET_MODE 1
 
-#define FEATURE_Z_PROBE 1
+#define FEATURE_Z_PROBE true
 // Especially if you have more then 1 extruder acting as z probe this is important!
 #define EXTRUDER_IS_Z_PROBE 0
 // Disable all heaters before probing - required for inductive sensors
-#define Z_PROBE_DISABLE_HEATERS 0
-#define Z_PROBE_PIN 63
-#define Z_PROBE_PULLUP 1
-#define Z_PROBE_ON_HIGH 1
+#define Z_PROBE_DISABLE_HEATERS 1
+#define Z_PROBE_PIN 63 // AUX2
+#define Z_PROBE_PULLUP true
+#define Z_PROBE_ON_HIGH false
 #define Z_PROBE_X_OFFSET 0
 #define Z_PROBE_Y_OFFSET 0
-#define Z_PROBE_BED_DISTANCE 5.0 // Higher than max bed level distance error in mm
+#define Z_PROBE_BED_DISTANCE 2.0 // Higher than max bed level distance error in mm
 
 // Waits for a signal to start. Valid signals are probe hit and ok button.
 // This is needful if you have the probe trigger by hand.
 #define Z_PROBE_WAIT_BEFORE_TEST 0
 /** Speed of z-axis in mm/s when probing */
-#define Z_PROBE_SPEED 2
+#define Z_PROBE_SPEED 20
 /** Delay before going down. Needed for piezo endstops to reload safely. */
 #define Z_PROBE_DELAY 0
 #define Z_PROBE_XY_SPEED 150
 #define Z_PROBE_SWITCHING_DISTANCE 1.5 // Distance to safely switch off probe after it was activated
-#define Z_PROBE_REPETITIONS 5 // Repetitions for probing at one point.
+#define Z_PROBE_REPETITIONS 3 // Repetitions for probing at one point.
 #define Z_PROBE_USE_MEDIAN 0 // 1 = use middle value, 0 = use average of measurements.
 /** Distance between nozzle and bed when probe triggers. */
-#define Z_PROBE_HEIGHT 39.91
+#define Z_PROBE_HEIGHT 0
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
 #define Z_PROBE_START_SCRIPT ""
 #define Z_PROBE_FINISHED_SCRIPT ""
 /** Set 1 if you need a hot extruder for good probe results. Normally only required if nozzle is probe. */
-#define Z_PROBE_REQUIRES_HEATING 0
+#define Z_PROBE_REQUIRES_HEATING false
 /** Minimum extruder temperature for probing. If it is lower, it will be increased to that value. */
 #define Z_PROBE_MIN_TEMPERATURE 150
 
@@ -1663,13 +1663,13 @@ motorized bed leveling */
    This feature requires a working z-probe and you should have z-endstop at the top not at the bottom.
    The same 3 points are used for the G29 command.
 */
-#define FEATURE_AUTOLEVEL 0
-#define Z_PROBE_X1 100
+#define FEATURE_AUTOLEVEL true
+#define Z_PROBE_X1 20
 #define Z_PROBE_Y1 20
-#define Z_PROBE_X2 160
-#define Z_PROBE_Y2 170
-#define Z_PROBE_X3 20
-#define Z_PROBE_Y3 170
+#define Z_PROBE_X2 140
+#define Z_PROBE_Y2 20
+#define Z_PROBE_X3 80
+#define Z_PROBE_Y3 130
 /* Bending correction adds a value to a measured z-probe value. This may be
   required when the z probe needs some force to trigger and this bends the
   bed down. Currently the correction values A/B/C correspond to z probe
@@ -1861,7 +1861,7 @@ The following settings override uiconfig.h!
 27 or CONTROLLER_REPRAPWORLD_GLCD = ReprapWorld Graphical LCD
 */
 
-#define FEATURE_CONTROLLER NO_CONTROLLER
+#define FEATURE_CONTROLLER CONTROLLER_SMARTRAMPS
 
 /* You can have one keypad connected via single analog pin as seen on
  some printers with Melzi V2.0 board, 20x4 LCD and 5 buttons keypad. This must be
@@ -1876,17 +1876,17 @@ On 8 bit processors do not active all or you run out of text memory (64kb)
 and strange errors occur. 8-9 languages normally work.
 */
 #define LANGUAGE_EN_ACTIVE 1 // English
-#define LANGUAGE_DE_ACTIVE 1 // German
+#define LANGUAGE_DE_ACTIVE 0 // German
 #define LANGUAGE_NL_ACTIVE 0 // Dutch
-#define LANGUAGE_PT_ACTIVE 1 // Brazilian Portuguese
-#define LANGUAGE_IT_ACTIVE 1 // Italian
-#define LANGUAGE_ES_ACTIVE 1 // Spanish
+#define LANGUAGE_PT_ACTIVE 0 // Brazilian Portuguese
+#define LANGUAGE_IT_ACTIVE 0 // Italian
+#define LANGUAGE_ES_ACTIVE 0 // Spanish
 #define LANGUAGE_FI_ACTIVE 0 // Finnish
 #define LANGUAGE_SE_ACTIVE 0 // Swedish
-#define LANGUAGE_FR_ACTIVE 1 // French
+#define LANGUAGE_FR_ACTIVE 0 // French
 #define LANGUAGE_CZ_ACTIVE 0 // Czech
-#define LANGUAGE_PL_ACTIVE 1 // Polish
-#define LANGUAGE_TR_ACTIVE 1 // Turkish
+#define LANGUAGE_PL_ACTIVE 0 // Polish
+#define LANGUAGE_TR_ACTIVE 0 // Turkish
 
 /* Some displays loose their settings from time to time. Try uncommenting the
 auto-repair function if this is the case. It is not supported for all display
@@ -1896,8 +1896,8 @@ computations, so do not enable it if your display works stable!
 //#define TRY_AUTOREPAIR_LCD_ERRORS
 
 // This is line 2 of the status display at startup. Change to your like.
-#define UI_PRINTER_NAME "MyPrinter"
-#define UI_PRINTER_COMPANY "Self Made"
+#define UI_PRINTER_NAME "SmartrapCore"
+#define UI_PRINTER_COMPANY "Manicarus"
 
 
 /** For graphic displays you can have a fixed top line. It can also contain
@@ -1922,10 +1922,10 @@ info pages with next/previous button/click-encoder */
 Unfortunately, the encoder have a different count of phase changes between clicks.
 Select an encoder speed from 0 = fastest to 2 = slowest that results in one menu move per click.
 */
-#define UI_ENCODER_SPEED 1
+#define UI_ENCODER_SPEED 2
 
 // Set to 1 to reverse encoder direction
-#define UI_REVERSE_ENCODER 0
+#define UI_REVERSE_ENCODER true
 
 /* There are 2 ways to change positions. You can move by increments of 1/0.1 mm resulting in more menu entries
 and requiring many turns on your encode. The alternative is to enable speed dependent positioning. It will change
@@ -2003,4 +2003,3 @@ If you have leveling with bed coating or fixed z min you can use this menu to ad
 //#define CUSTOM_EVENTS
 
 #endif
-
